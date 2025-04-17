@@ -25,10 +25,15 @@ message = '';
  data = xlsx.utils.sheet_to_json(sheet);
 }
 const otherFile = require('./ipush');
+const GoogleSheet = require('./GoogleSheet');
 //otherFile.someFunction();
+//GoogleSheet.ipussh();
 
-
-
+app.get('/ENTER', (req, res) => {
+  const a = req.query.a;
+console.log(`ENTER: ${a} at : ${otherFile.nowtime()}`);
+  res.json({ message: `OK` });
+});
 app.get('/GET', (req, res) => {
   const a = req.query.a;
   const b = req.query.b;
@@ -50,15 +55,14 @@ if(filteredData.length > 0)
   else res.json({ message: `error::101::${user} : ${a} are not Exist or passowrd false` });
 });
 
-
-app.get('/NEWW', (req, res) => {
+app.get('/NEWW',async (req, res) => {
    a = req.query.a;
    b = req.query.b;
    f = req.query.force;
-
   if (!a|| !b) {
     return res.status(400).send('enter a and b.');
   }
+
    intalize('data.xlsx',b);
    sheetName = workbook.SheetNames.find(name => name === b);
     newA = a.replace(/%7C/g, "|");  // Replaces first "o" with "a"
@@ -74,12 +78,19 @@ app.get('/NEWW', (req, res) => {
     a3 = a2[i].split('::');
     if(a3[0] == marg3 && column.includes(a3[1])) {exist = true; user = a3[1];}
     }
-    if(exist == true && f != 'true' && b != 'EvaEnter') {
+    if(exist == true && f != 'true') {
     console.log(`${user} are Exist`);
-    message = `error::101::${user} are Exist`;}
-    else {message = otherFile.ipush(b,a,xlsx,'data.xlsx');}
+    message = `error::101::${user} are Exist`;
+    }
+    else {
+    message = otherFile.ipush(b,a,xlsx,'data.xlsx');
+    message =await GoogleSheet.Gpush({
+    sheet: 'Users 02',
+    a: a,
+    forc: true,
+    });
+    }
     otherFile.newxlsx({ isheet: 'G' },{ filePath: 'ecel/filePath' });
-
 //res.json({ message: `now put [${a}] is Ok` });
 res.json({ message: message });
 });
@@ -99,6 +110,5 @@ res.json({ message: message });
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
 });
-
 
 

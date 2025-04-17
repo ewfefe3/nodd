@@ -17,8 +17,8 @@ app.use(cors());
 
 
  // Export the function
-module.exports = {
-  ipush,newxlsx
+ module.exports = {
+  ipush,newxlsx,nowdate,nowtime
 };
 /*
 module.exports = function ipush2(x, y) {
@@ -112,8 +112,6 @@ fruits[i] = rowMap.get(Frow[i+1]);
   workbook.Sheets[sheetName] = newWorksheet; // Update the first sheet
   xlsx.writeFile(workbook, filename);
     imessage = `now put [${a}] in (${sheetName}) is Ok`;
-    if(b != 'EvaEnter') console.log(`now put [${a}] in (${sheetName}) is Ok`);
-    else console.log(`new Enter Divaise : [${divaic}] In [${nowtime()}]`);
   }else imessage = ` error::100::input ${NULLS} not completed`;
 
   return imessage;
